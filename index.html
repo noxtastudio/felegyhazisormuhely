@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Félegyházi Sörműhely — sör válogatás</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=4">
+</head>
+<body>
+
+  <!-- ─── TOP NAVIGATION ─────────────────────────────────────────────── -->
+  <header class="nav">
+    <a class="brand" href="#">
+      <span>Félegyházi</span>
+      <em>Sörműhely</em>
+    </a>
+
+    <nav class="menu">
+      <a href="#" class="active">Söreink</a>
+      <a href="#">Rólunk</a>
+      <a href="#">Alapanyagaink</a>
+      <a href="#">Hírek</a>
+      <a href="#">Kapcsolat</a>
+    </nav>
+
+    <div class="nav-right">
+      <button class="icon-btn" aria-label="Fiók">
+        <svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      </button>
+      <button class="icon-btn cart" aria-label="Kosár">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 7h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L6 7z M9 7a3 3 0 0 1 6 0" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="cart-badge">2</span>
+      </button>
+      <button class="lang">HU</button>
+    </div>
+  </header>
+
+  <!-- ─── STAGE ──────────────────────────────────────────────────────── -->
+  <main class="stage">
+
+    <!-- All bottles stacked. State class drives position/scale. -->
+    <div class="bottles" id="bottles">
+      <img class="bottle-img" data-idx="0" src="bottles/02.png" alt="Mangós Búza">
+      <img class="bottle-img" data-idx="1" src="bottles/01.png" alt="Bécsi Lager">
+      <img class="bottle-img" data-idx="2" src="bottles/05.png" alt="Málnás Gose">
+      <img class="bottle-img" data-idx="3" src="bottles/04.png" alt="Belga Búza">
+      <img class="bottle-img" data-idx="4" src="bottles/03.png" alt="Piña Colada Sour Ale">
+      <img class="bottle-img" data-idx="5" src="bottles/06.png" alt="Meggyes">
+    </div>
+
+    <!-- Glowing podium ring underneath -->
+    <div class="podium" id="podium" aria-hidden="true">
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <div class="ring r3"></div>
+      <div class="glow"></div>
+    </div>
+
+    <!-- Center content panel (left of the bottle) -->
+    <section class="content" id="content">
+      <span class="pill">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+          <path d="M12 2 L13.5 8.5 L20 10 L13.5 11.5 L12 18 L10.5 11.5 L4 10 L10.5 8.5 Z" fill="currentColor"/>
+        </svg>
+        <span id="pillText">Újdonság</span>
+      </span>
+      <h1 class="title" id="title">Mangós<br>Búza</h1>
+      <p class="subtitle" id="subtitle">Trópusi gyümölcsös búzasör</p>
+      <p class="description" id="description">
+        Trópusi mangó-pulp búzasör alapon. Lágy és gyümölcsös, természetes mangóval készítve.
+      </p>
+      <dl class="spec">
+        <div><dt>Típus</dt><dd id="specType">Gyümölcsös búzasör</dd></div>
+        <div><dt>Alkohol</dt><dd id="specAbv">5% V/V</dd></div>
+        <div><dt>Kiszerelés</dt><dd>330 ml</dd></div>
+      </dl>
+      <div class="ctas">
+        <button class="cta-primary">
+          Felfedezem
+          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14 M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="cta-secondary">
+          <span class="play-circle">
+            <svg viewBox="0 0 24 24" width="12" height="12"><path d="M9 6 L18 12 L9 18 Z" fill="currentColor"/></svg>
+          </span>
+          Ismerd meg a sörünket
+        </button>
+      </div>
+    </section>
+
+    <!-- Right side: per-beer feature highlights -->
+    <aside class="features" id="features">
+      <!-- 3 feature blocks rendered by JS -->
+    </aside>
+
+    <!-- LEFT side preview card (prev beer) -->
+    <aside class="side-card left" id="sideLeft">
+      <h3 class="side-name"></h3>
+      <p class="side-sub"></p>
+      <p class="side-desc"></p>
+      <div class="side-footer">
+        <span class="side-abv"></span>
+        <button class="side-plus" aria-label="Részletek">+</button>
+      </div>
+    </aside>
+
+    <!-- RIGHT side preview card (next beer) -->
+    <aside class="side-card right" id="sideRight">
+      <h3 class="side-name"></h3>
+      <p class="side-sub"></p>
+      <p class="side-desc"></p>
+      <div class="side-footer">
+        <span class="side-abv"></span>
+        <button class="side-plus" aria-label="Részletek">+</button>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- ─── BOTTOM CONTROLS ──────────────────────────────────────────────── -->
+  <footer class="controls">
+    <button class="arrow" id="prev" aria-label="Előző">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M16 4 L8 12 L16 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <span class="counter-current" id="capNum">01</span>
+    <div class="progress" id="progress"></div>
+    <span class="counter-total">/ <span id="capTotal">06</span></span>
+    <button class="arrow" id="next" aria-label="Következő">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 4 L16 12 L8 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </footer>
+
+  <script type="module" src="script.js?v=4"></script>
+</body>
+</html>

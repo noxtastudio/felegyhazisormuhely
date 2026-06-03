@@ -1,0 +1,655 @@
+/* ──────────────────────────────────────────────────────────────────────── */
+/* Félegyházi Sörműhely — dark editorial product page                      */
+/* Layout: nav top · stage (bottle center, content left, features right,   */
+/* side cards at edges) · controls bottom.                                  */
+/* ──────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --bg:        #0A0807;       /* near-black warm */
+  --bg-card:   #14110E;       /* card / panel bg */
+  --border:    rgba(245, 240, 232, 0.08);
+  --ink:       #F5F0E8;
+  --ink-soft:  rgba(245, 240, 232, 0.62);
+  --ink-faint: rgba(245, 240, 232, 0.38);
+  --accent:    #E87B2C;       /* default orange — updated per-beer via JS */
+  --accent-soft: rgba(232, 123, 44, 0.55);
+  --ease:      cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Subtle accent glow at top + bottom of the viewport. Single fixed layer
+   — much cheaper than the multi-layer hex pattern that was here before. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(ellipse at 50% 0%,   var(--accent-soft), transparent 60%),
+    radial-gradient(ellipse at 50% 100%, var(--accent-soft), transparent 60%);
+  opacity: 0.08;
+  transition: opacity 0.7s var(--ease);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* TOP NAV                                                                  */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 22px 44px;
+  background: linear-gradient(to bottom, rgba(10, 8, 7, 0.92), rgba(10, 8, 7, 0.65) 70%, transparent);
+  gap: 24px;
+}
+
+.brand {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 26px;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  text-decoration: none;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.brand em {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.menu {
+  display: flex;
+  gap: 38px;
+  justify-content: center;
+}
+.menu a {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-decoration: none;
+  position: relative;
+  padding: 6px 2px;
+  transition: color 0.25s ease;
+}
+.menu a:hover { color: var(--ink); }
+.menu a.active { color: var(--ink); }
+.menu a.active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+  transition: background 0.5s ease;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  justify-content: flex-end;
+}
+.icon-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--ink);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+.icon-btn:hover { border-color: var(--accent); background: rgba(232, 123, 44, 0.08); }
+.cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--accent);
+  color: #0a0807;
+  font-weight: 700;
+  font-size: 10px;
+  min-width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  transition: background 0.5s ease;
+}
+.lang {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--ink-soft);
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+.lang:hover { color: var(--ink); border-color: var(--accent); }
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* STAGE                                                                    */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  padding-top: 88px;
+  padding-bottom: 88px;
+  overflow: hidden;
+}
+
+/* Bottles container — bottles are absolute positioned by state class */
+.bottles { position: absolute; inset: 0; pointer-events: none; }
+
+/* Bottles use translate3d only (GPU-accelerated). NO transitions on   */
+/* left/top/filter — those trigger layout/paint, which tanked FPS.      */
+.bottle-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 64vh;
+  width: auto;
+  transform: translate3d(-50%, -50%, 0) scale(0.2);
+  opacity: 0;
+  pointer-events: auto;
+  cursor: pointer;
+  will-change: transform, opacity;
+  transition: transform 0.7s var(--ease),
+              opacity   0.5s var(--ease);
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.55));
+  z-index: 5;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.bottle-img.state-center {
+  opacity: 1;
+  transform: translate3d(-50%, -50%, 0) scale(1);
+  z-index: 10;
+}
+/* Side bottles: anchored 150px from viewport edge (= card center). Slight
+   downward shift (+4vh) so their bottom sits just above the card's top.   */
+.bottle-img.state-left {
+  opacity: 0.9;
+  transform: translate3d(calc(-50% - 50vw + 150px), calc(-50% + 4vh), 0) scale(0.40);
+  z-index: 14;
+}
+.bottle-img.state-right {
+  opacity: 0.9;
+  transform: translate3d(calc(-50% + 50vw - 150px), calc(-50% + 4vh), 0) scale(0.40);
+  z-index: 14;
+}
+.bottle-img.state-far-left {
+  opacity: 0;
+  transform: translate3d(calc(-50% - 65vw), -50%, 0) scale(0.25);
+  z-index: 2;
+}
+.bottle-img.state-far-right {
+  opacity: 0;
+  transform: translate3d(calc(-50% + 65vw), -50%, 0) scale(0.25);
+  z-index: 2;
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* Glowing podium under the center bottle                                  */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.podium {
+  position: absolute;
+  left: 50%;
+  bottom: 88px;
+  transform: translateX(-50%);
+  width: 520px;
+  height: 110px;
+  pointer-events: none;
+  z-index: 8;
+}
+.podium .ring {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0.85;
+  transition: border-color 0.5s ease, box-shadow 0.5s ease;
+}
+.podium .ring.r1 { width: 220px; height: 28px; bottom: 8px;  opacity: 1;   box-shadow: 0 0 22px var(--accent-soft); }
+.podium .ring.r2 { width: 360px; height: 50px; bottom: 0px;  opacity: 0.45; }
+.podium .ring.r3 { width: 520px; height: 80px; bottom: -10px; opacity: 0.18; }
+.podium .glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 100%, var(--accent-soft) 0%, transparent 65%);
+  filter: blur(8px);
+  opacity: 0.7;
+  transition: opacity 0.5s ease;
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* Center content panel (top-left of bottle)                                */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+/* Content panel in its OWN column. left:300px = clear gap (50px card-left
+   + 200px card-width + 50px breathing room). Narrower max width.          */
+.content {
+  position: absolute;
+  top: 50%;
+  left: 300px;
+  transform: translateY(-50%);
+  width: min(22vw, 320px);
+  max-height: 76vh;
+  z-index: 20;
+  transition: opacity 0.4s ease;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px 6px 11px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 22px;
+  transition: color 0.5s ease, border-color 0.5s ease;
+}
+
+.title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(32px, 3.4vw, 56px);
+  line-height: 0.94;
+  letter-spacing: -0.022em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  transition: color 0.5s ease;
+}
+
+.subtitle {
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 22px;
+}
+
+.description {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin-bottom: 26px;
+  font-weight: 300;
+}
+
+.spec {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin-bottom: 28px;
+}
+.spec > div {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.spec dt {
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink-faint);
+}
+.spec dd {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.ctas { display: flex; flex-direction: column; gap: 14px; }
+
+.cta-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: var(--accent);
+  color: #0a0807;
+  border: none;
+  padding: 16px 22px;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+.cta-primary:hover { transform: translateY(-1px); filter: brightness(1.08); }
+
+.cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  padding: 8px 4px;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+.cta-secondary:hover { color: var(--ink); }
+.play-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 3px;
+  transition: color 0.5s ease, border-color 0.5s ease;
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* Right side: feature highlights for the centered beer                     */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+/* Features panel: right:300px gives same 50px breathing room from the
+   right side card (50 card + 200 card + 50 gap = 300). Narrower.          */
+.features {
+  position: absolute;
+  top: 50%;
+  right: 300px;
+  transform: translateY(-50%);
+  width: min(16vw, 230px);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  transition: opacity 0.4s ease;
+}
+
+.feature {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.feature:last-child { border-bottom: none; }
+
+.feature-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.5s ease, border-color 0.5s ease;
+}
+.feature-icon svg { width: 20px; height: 20px; }
+
+.feature-head {
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+.feature-body {
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* Side cards (under the small prev/next bottles)                           */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+/* Side cards: 200px wide so they leave breathing room before the content
+   column. Anchored 50px from edge → card center at 150px = bottle anchor.
+   Card sits low + bottle overlaps its top half (z-index 4 vs 14).         */
+.side-card {
+  position: absolute;
+  bottom: 100px;
+  width: 200px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  z-index: 4;
+  transition: opacity 0.4s ease;
+}
+.side-card.left  { left: 50px; }
+.side-card.right { right: 50px; }
+
+.side-name {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.side-sub {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+.side-desc {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  font-weight: 300;
+  margin-bottom: 12px;
+}
+.side-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.side-abv {
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.side-plus {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--ink-soft);
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.side-plus:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* Bottom controls                                                          */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.controls {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  width: min(58vw, 640px);
+  z-index: 50;
+  padding: 6px 18px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-card);
+}
+
+.arrow {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--ink);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+.arrow:hover  { border-color: var(--accent); color: var(--accent); opacity: 1; }
+.arrow:active { transform: scale(0.92); }
+
+.counter-current {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  min-width: 26px;
+  text-align: center;
+  transition: color 0.5s ease;
+}
+.counter-total {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.progress {
+  flex: 1;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.seg {
+  flex: 1;
+  height: 1.5px;
+  background: rgba(245, 240, 232, 0.15);
+  border: none;
+  border-radius: 1px;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.4s ease, transform 0.4s var(--ease);
+  transform-origin: center;
+}
+.seg:hover { background: rgba(245, 240, 232, 0.35); }
+.seg.active {
+  background: var(--accent);
+  transform: scaleY(2.6);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* Responsive                                                               */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1280px) {
+  .content    { width: 280px; left: 4vw; }
+  .features   { width: 240px; right: 4vw; }
+  .side-card  { width: 200px; }
+  .side-card.left  { left: 4vw; }
+  .side-card.right { right: 4vw; }
+  .bottle-img { height: 62vh; }
+  .bottle-img.state-left  { left: 22%; }
+  .bottle-img.state-right { left: 78%; }
+}
+
+@media (max-width: 1024px) {
+  .menu { display: none; }
+  .features, .side-card { display: none; }
+  .content { width: 320px; }
+  .bottle-img { height: 58vh; }
+}
+
+@media (max-width: 720px) {
+  .nav { padding: 14px 18px; }
+  .brand { font-size: 18px; }
+  .brand em { font-size: 9px; letter-spacing: 0.32em; }
+  .content { left: 4vw; right: 4vw; width: auto; top: auto; bottom: 200px; transform: none; }
+  .title { font-size: 38px; }
+  .bottle-img { height: 48vh; }
+  .bottle-img.state-left, .bottle-img.state-right { transform: translate(-50%, -50%) scale(0.32); }
+  .controls { width: calc(100vw - 24px); gap: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bottle-img, .podium .ring, .podium .glow { transition: none !important; }
+}
