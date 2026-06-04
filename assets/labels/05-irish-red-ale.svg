@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1799" height="970" viewBox="0 0 1799 970" preserveAspectRatio="xMidYMid meet" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+
+  <defs>
+    <radialGradient id="vig" cx="50%" cy="50%" r="55%">
+      <stop offset="50%" stop-color="black" stop-opacity="0"></stop>
+      <stop offset="100%" stop-color="black" stop-opacity="0.22"></stop>
+    </radialGradient>
+    <pattern id="dots" x="0" y="0" width="56" height="56" patternUnits="userSpaceOnUse">
+      <circle cx="28" cy="28" r="2" fill="#F5EFE0" opacity="0.13"></circle>
+    </pattern>
+  </defs>
+
+  
+  <rect width="1799" height="970" fill="#7C2A1F"></rect>
+  <rect width="1799" height="970" fill="url(#dots)"></rect>
+  <rect width="1799" height="970" fill="url(#vig)"></rect>
+
+  
+
+  
+  <text x="899" y="155" text-anchor="middle" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-style="italic" font-weight="700" font-size="92" letter-spacing="3" fill="#F5EFE0">FÉLEGYHÁZI</text>
+
+  
+  <text x="899" y="210" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="600" font-size="32" letter-spacing="18" fill="#F5EFE0" opacity="0.92">SÖRMŰHELY</text>
+
+  
+  <line x1="759" y1="250" x2="1039" y2="250" stroke="#F5EFE0" stroke-width="1.5" opacity="0.5"></line>
+  <circle cx="899" cy="250" r="4" fill="#F5EFE0" opacity="0.7"></circle>
+
+  
+  <g transform="translate(899, 480) scale(1.75)">
+    <g fill="#F5EFE0">
+            <ellipse cx="0" cy="-65" rx="38" ry="48"></ellipse>
+            <ellipse cx="-55" cy="15" rx="38" ry="48" transform="rotate(-50 -55 15)"></ellipse>
+            <ellipse cx="55" cy="15" rx="38" ry="48" transform="rotate(50 55 15)"></ellipse>
+            <circle cx="0" cy="-10" r="14"></circle>
+            <path d="M 0 0 C 5 30 -5 80 5 120" stroke="#F5EFE0" stroke-width="4" fill="none" stroke-linecap="round"></path>
+        </g>
+  </g>
+
+  
+  <text x="899" y="750" text-anchor="middle" font-family="Helvetica Neue, &#39;Arial Black&#39;, sans-serif" font-weight="900" font-size="128" letter-spacing="-1.5" fill="#F5EFE0">IRISH RED</text>
+  <text x="899" y="867" text-anchor="middle" font-family="Helvetica Neue, &#39;Arial Black&#39;, sans-serif" font-weight="900" font-size="150" letter-spacing="-1.5" fill="#F5EFE0">ALE</text>
+
+  
+  <line x1="639" y1="900" x2="1159" y2="900" stroke="#F5EFE0" stroke-width="1" opacity="0.45"></line>
+
+  
+  <text x="899" y="938" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="600" font-size="26" letter-spacing="8" fill="#F5EFE0" opacity="0.92">330ML  /  ALC. 5.2% V/V</text>
+
+</svg>

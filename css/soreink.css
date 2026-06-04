@@ -34,138 +34,21 @@ html, body {
 
 /* Subtle accent glow at top + bottom of the viewport. Single fixed layer
    — much cheaper than the multi-layer hex pattern that was here before. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image:
-    radial-gradient(ellipse at 50% 0%,   var(--accent-soft), transparent 60%),
-    radial-gradient(ellipse at 50% 100%, var(--accent-soft), transparent 60%);
-  opacity: 0.08;
-  transition: opacity 0.7s var(--ease);
-}
+/* (Top/bottom radial accent glow removed — the per-beer background image
+   already provides the lighting effect.)                                   */
 
 /* ─────────────────────────────────────────────────────────────────────── */
 /* TOP NAV                                                                  */
 /* ─────────────────────────────────────────────────────────────────────── */
 
-.nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 60;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  padding: 22px 44px;
-  background: linear-gradient(to bottom, rgba(10, 8, 7, 0.92), rgba(10, 8, 7, 0.65) 70%, transparent);
-  gap: 24px;
-}
-
-.brand {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-style: italic;
-  font-weight: 500;
-  font-size: 26px;
-  letter-spacing: 0.01em;
-  color: var(--ink);
-  text-decoration: none;
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
-.brand em {
-  font-family: 'Inter', sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 11px;
-  letter-spacing: 0.42em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-
-.menu {
-  display: flex;
-  gap: 38px;
-  justify-content: center;
-}
-.menu a {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-  text-decoration: none;
-  position: relative;
-  padding: 6px 2px;
-  transition: color 0.25s ease;
-}
-.menu a:hover { color: var(--ink); }
-.menu a.active { color: var(--ink); }
-.menu a.active::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -4px;
-  transform: translateX(-50%);
-  width: 18px;
-  height: 2px;
-  background: var(--accent);
-  border-radius: 1px;
+/* Nav chrome (.nav, .brand, .menu, .nav-right, .icon-btn, .cart-badge,
+   .nav-burger, .lang) is provided by base.css — shared across all pages.
+   Only the Söreink active-link accent gets a custom color via --accent. */
+.menu a.active::after,
+.menu a[aria-current="page"]::after {
+  background: var(--accent);   /* per-beer accent overrides base brass */
   transition: background 0.5s ease;
 }
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  justify-content: flex-end;
-}
-.icon-btn {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--ink);
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position: relative;
-  transition: border-color 0.25s ease, background 0.25s ease;
-}
-.icon-btn:hover { border-color: var(--accent); background: rgba(232, 123, 44, 0.08); }
-.cart-badge {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  background: var(--accent);
-  color: #0a0807;
-  font-weight: 700;
-  font-size: 10px;
-  min-width: 17px;
-  height: 17px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 4px;
-  transition: background 0.5s ease;
-}
-.lang {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--ink-soft);
-  padding: 7px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  cursor: pointer;
-}
-.lang:hover { color: var(--ink); border-color: var(--accent); }
 
 /* ─────────────────────────────────────────────────────────────────────── */
 /* STAGE                                                                    */
@@ -181,8 +64,56 @@ body::before {
   overflow: hidden;
 }
 
+/* Per-beer background image. Two stacked layers crossfade between beers. */
+.visual-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: #0a0807;
+  overflow: hidden;
+}
+.bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+  pointer-events: none;
+  will-change: opacity;
+}
+.bg-img.active { opacity: 1; }
+
+/* Strong vignette so text columns get a dark backdrop. Goes near-black
+   on the outer 30%, fades to transparent in the central 40% where the
+   bottle sits. Plus a darker overlay on the bg image itself so the
+   illustration sits BEHIND the foreground, not competing with it.        */
+.bg-img { filter: brightness(1.0) saturate(1.05); }
+
+.visual-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to right,
+      rgba(0,0,0,0.78) 0%,
+      rgba(0,0,0,0.55) 10%,
+      rgba(0,0,0,0.12) 22%,
+      rgba(0,0,0,0)    34%,
+      rgba(0,0,0,0)    66%,
+      rgba(0,0,0,0.12) 78%,
+      rgba(0,0,0,0.55) 90%,
+      rgba(0,0,0,0.78) 100%),
+    radial-gradient(ellipse at 50% 55%,
+      transparent 38%,
+      rgba(0,0,0,0.18) 100%);
+}
+
 /* Bottles container — bottles are absolute positioned by state class */
-.bottles { position: absolute; inset: 0; pointer-events: none; }
+.bottles { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
 
 /* Bottles use translate3d only (GPU-accelerated). NO transitions on   */
 /* left/top/filter — those trigger layout/paint, which tanked FPS.      */
@@ -233,142 +164,123 @@ body::before {
   z-index: 2;
 }
 
-/* ─────────────────────────────────────────────────────────────────────── */
-/* Glowing podium under the center bottle                                  */
-/* ─────────────────────────────────────────────────────────────────────── */
-
-.podium {
-  position: absolute;
-  left: 50%;
-  bottom: 88px;
-  transform: translateX(-50%);
-  width: 520px;
-  height: 110px;
-  pointer-events: none;
-  z-index: 8;
-}
-.podium .ring {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
-  border: 1.5px solid var(--accent);
-  border-radius: 50%;
-  opacity: 0.85;
-  transition: border-color 0.5s ease, box-shadow 0.5s ease;
-}
-.podium .ring.r1 { width: 220px; height: 28px; bottom: 8px;  opacity: 1;   box-shadow: 0 0 22px var(--accent-soft); }
-.podium .ring.r2 { width: 360px; height: 50px; bottom: 0px;  opacity: 0.45; }
-.podium .ring.r3 { width: 520px; height: 80px; bottom: -10px; opacity: 0.18; }
-.podium .glow {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 100%, var(--accent-soft) 0%, transparent 65%);
-  filter: blur(8px);
-  opacity: 0.7;
-  transition: opacity 0.5s ease;
-}
+/* Podium effect is baked into the per-beer background image — no separate
+   .podium element needed. (Removed from this stylesheet.)                  */
 
 /* ─────────────────────────────────────────────────────────────────────── */
 /* Center content panel (top-left of bottle)                                */
 /* ─────────────────────────────────────────────────────────────────────── */
 
-/* Content panel in its OWN column. left:300px = clear gap (50px card-left
-   + 200px card-width + 50px breathing room). Narrower max width.          */
+/* Content panel: left:300px = clear gap from side card (50+200+50 px).
+   max-height caps how far it can extend down so it never reaches into
+   the side card / controls zone (~220px tall at the bottom).              */
 .content {
   position: absolute;
   top: 50%;
   left: 300px;
   transform: translateY(-50%);
-  width: min(22vw, 320px);
-  max-height: 76vh;
+  width: min(22vw, 300px);
+  max-height: calc(100vh - 340px);
+  overflow: visible;
   z-index: 20;
   transition: opacity 0.4s ease;
+}
+.content::before {
+  content: "";
+  position: absolute;
+  inset: -30px 0 -30px -20px;
+  z-index: -1;
+  background: linear-gradient(to right,
+    rgba(0,0,0,0.80) 0%,
+    rgba(0,0,0,0.70) 60%,
+    rgba(0,0,0,0.25) 88%,
+    rgba(0,0,0,0) 100%);
+  pointer-events: none;
 }
 
 .pill {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 14px 6px 11px;
+  gap: 6px;
+  padding: 5px 12px 5px 9px;
   border: 1px solid var(--accent);
   color: var(--accent);
   border-radius: 999px;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0.32em;
   text-transform: uppercase;
   font-weight: 600;
-  margin-bottom: 22px;
+  margin-bottom: 14px;
   transition: color 0.5s ease, border-color 0.5s ease;
 }
 
 .title {
   font-family: 'Inter', sans-serif;
   font-weight: 800;
-  font-size: clamp(32px, 3.4vw, 56px);
+  font-size: clamp(28px, 2.6vw, 44px);
   line-height: 0.94;
   letter-spacing: -0.022em;
   color: var(--accent);
   text-transform: uppercase;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   transition: color 0.5s ease;
 }
 
 .subtitle {
-  font-size: 11px;
-  letter-spacing: 0.32em;
+  font-size: 10px;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   font-weight: 600;
   color: var(--ink);
-  margin-bottom: 22px;
+  margin-bottom: 16px;
 }
 
 .description {
-  font-size: 14px;
-  line-height: 1.65;
+  font-size: 13px;
+  line-height: 1.55;
   color: var(--ink-soft);
-  margin-bottom: 26px;
+  margin-bottom: 20px;
   font-weight: 300;
 }
 
 .spec {
   border-top: 1px solid var(--border);
-  padding-top: 16px;
-  margin-bottom: 28px;
+  padding-top: 10px;
+  margin-bottom: 20px;
 }
 .spec > div {
   display: grid;
-  grid-template-columns: 100px 1fr;
+  grid-template-columns: 90px 1fr;
   align-items: baseline;
-  padding: 8px 0;
+  padding: 6px 0;
   border-bottom: 1px solid var(--border);
 }
 .spec dt {
-  font-size: 10px;
-  letter-spacing: 0.32em;
+  font-size: 9px;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   font-weight: 600;
   color: var(--ink-faint);
 }
 .spec dd {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--ink);
 }
 
-.ctas { display: flex; flex-direction: column; gap: 14px; }
+.ctas { display: flex; flex-direction: column; gap: 10px; }
 
 .cta-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 12px;
   background: var(--accent);
   color: #0a0807;
   border: none;
-  padding: 16px 22px;
-  font-size: 11px;
-  letter-spacing: 0.32em;
+  padding: 13px 18px;
+  font-size: 10px;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   font-weight: 700;
   border-radius: 8px;
@@ -380,13 +292,13 @@ body::before {
 .cta-secondary {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   background: none;
   border: none;
   color: var(--ink-soft);
-  padding: 8px 4px;
-  font-size: 11px;
-  letter-spacing: 0.32em;
+  padding: 4px 4px;
+  font-size: 10px;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   font-weight: 600;
   cursor: pointer;
@@ -394,15 +306,16 @@ body::before {
 }
 .cta-secondary:hover { color: var(--ink); }
 .play-circle {
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   border: 1.5px solid var(--accent);
   color: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-left: 3px;
+  padding-left: 2px;
+  flex-shrink: 0;
   transition: color 0.5s ease, border-color 0.5s ease;
 }
 
@@ -474,19 +387,7 @@ body::before {
 /* Side cards: 200px wide so they leave breathing room before the content
    column. Anchored 50px from edge → card center at 150px = bottle anchor.
    Card sits low + bottle overlaps its top half (z-index 4 vs 14).         */
-.side-card {
-  position: absolute;
-  bottom: 100px;
-  width: 200px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 14px 16px;
-  z-index: 4;
-  transition: opacity 0.4s ease;
-}
-.side-card.left  { left: 50px; }
-.side-card.right { right: 50px; }
+.side-card { display: none; }
 
 .side-name {
   font-size: 14px;
@@ -543,19 +444,9 @@ body::before {
 /* ─────────────────────────────────────────────────────────────────────── */
 
 .controls {
-  position: fixed;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  width: min(58vw, 640px);
-  z-index: 50;
-  padding: 6px 18px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--bg-card);
+  /* Hidden — navigation is scroll / swipe / arrow keys only. The podium
+     ring at the bottom of the viewport is uninterrupted.                  */
+  display: none;
 }
 
 .arrow {
@@ -621,35 +512,160 @@ body::before {
 /* Responsive                                                               */
 /* ─────────────────────────────────────────────────────────────────────── */
 
-@media (max-width: 1280px) {
-  .content    { width: 280px; left: 4vw; }
-  .features   { width: 240px; right: 4vw; }
-  .side-card  { width: 200px; }
-  .side-card.left  { left: 4vw; }
-  .side-card.right { right: 4vw; }
-  .bottle-img { height: 62vh; }
-  .bottle-img.state-left  { left: 22%; }
-  .bottle-img.state-right { left: 78%; }
+/* Tablet / smaller desktops: drop the side cards (they're the first thing
+   to collide with the content panel). Keep side bottles + features.       */
+@media (max-width: 1366px) {
+  .side-card { display: none; }
+  .content   { left: 240px; }
+  .features  { right: 240px; }
+  .bottle-img.state-left  { transform: translate3d(calc(-50% - 50vw + 130px), calc(-50% + 4vh), 0) scale(0.36); }
+  .bottle-img.state-right { transform: translate3d(calc(-50% + 50vw - 130px), calc(-50% + 4vh), 0) scale(0.36); }
 }
 
-@media (max-width: 1024px) {
-  .menu { display: none; }
-  .features, .side-card { display: none; }
-  .content { width: 320px; }
-  .bottle-img { height: 58vh; }
+/* Smaller still: drop the features panel too. Just bottles + content. */
+@media (max-width: 1100px) {
+  .features  { display: none; }
+  .content   { left: 5vw; width: min(24vw, 260px); }
+  .title     { font-size: clamp(26px, 2.4vw, 36px); }
+  .cta-primary, .cta-secondary { font-size: 12px; padding-left: 18px; padding-right: 18px; }
+  .bottle-img.state-left  { transform: translate3d(calc(-50% - 50vw + 90px), calc(-50% + 4vh), 0) scale(0.30); }
+  .bottle-img.state-right { transform: translate3d(calc(-50% + 50vw - 90px), calc(-50% + 4vh), 0) scale(0.30); }
 }
 
+/* Page-specific mobile rules at this breakpoint (nav chrome handled by base.css). */
+@media (max-width: 900px) {
+  .content { left: 5vw; right: auto; width: 280px; }
+  .bottle-img.state-left, .bottle-img.state-right {
+    opacity: 0;     /* no room for side bottles at this width */
+  }
+}
+
+/* Mobile: scrollable page, content stacked above bottle (no overlap). */
 @media (max-width: 720px) {
+  /* Allow the page to scroll — no more locked 100vh stage. */
+  html, body { overflow: auto; height: auto; }
+  .soreink-page { height: auto; min-height: 100vh; overflow: visible; }
+  .stage {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100svh;       /* small-viewport unit so mobile chrome doesn't push it */
+    padding: 86px 0 92px;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Background stays anchored to the viewport behind everything. */
+  .visual-bg { position: fixed; inset: 0; }
+
+  /* BOTTLES — first on mobile, compact + capped. */
+  .bottles {
+    position: relative;
+    order: 0;
+    inset: auto;
+    height: clamp(220px, 30vh, 300px);
+    flex: 0 0 auto;
+    margin: 0;
+    pointer-events: auto;
+  }
+
+  /* CONTENT — below the bottle. margin-top:auto pushes it to the bottom of
+     the flex stage, so the gap between bottle and text scales with viewport.
+     Use margin for horizontal inset (NOT left/right — those don't form a box
+     under position:relative and leave the element 100vw wide). */
+  .content {
+    position: relative;
+    order: 1;
+    top: auto; bottom: auto; left: auto; right: auto;
+    width: auto;
+    max-width: 100%;
+    max-height: none;
+    transform: none;
+    margin: auto 18px 8px;
+    flex: 0 0 auto;
+    z-index: 20;
+  }
+  .content::before { inset: -22px -8px; }
+  .bottle-img {
+    position: absolute;
+    top: 0; left: 50%;
+    height: 100%;
+    width: auto;
+    transform: translate3d(-50%, 0, 0) scale(0.82);
+    transition: transform 0.4s var(--ease), opacity 0.4s var(--ease);
+  }
+  .bottle-img.state-center {
+    opacity: 1;
+    transform: translate3d(-50%, 0, 0) scale(1);
+  }
+  /* Side / far states hidden — there's no room for a 3-bottle carousel here. */
+  .bottle-img.state-left,
+  .bottle-img.state-right,
+  .bottle-img.state-far-left,
+  .bottle-img.state-far-right {
+    opacity: 0;
+    transform: translate3d(-50%, 0, 0) scale(0.7);
+  }
+
+  /* Typography */
   .nav { padding: 14px 18px; }
   .brand { font-size: 18px; }
   .brand em { font-size: 9px; letter-spacing: 0.32em; }
-  .content { left: 4vw; right: 4vw; width: auto; top: auto; bottom: 200px; transform: none; }
-  .title { font-size: 38px; }
-  .bottle-img { height: 48vh; }
-  .bottle-img.state-left, .bottle-img.state-right { transform: translate(-50%, -50%) scale(0.32); }
-  .controls { width: calc(100vw - 24px); gap: 12px; }
+  .title { font-size: clamp(28px, 9vw, 38px); margin-bottom: 14px; }
+  .subtitle {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+    display: block;
+  }
+  /* Append the ABV inline after the subtitle on mobile (no separate spec table). */
+  .subtitle[data-abv]::after {
+    content: "  \00B7  " attr(data-abv);
+    color: var(--ink-faint);
+    font-weight: 500;
+  }
+  .description { font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+
+  /* Spec table not needed on mobile — type/abv/ml live inline in the subtitle. */
+  .spec { display: none; }
+
+  .ctas { flex-direction: column; align-items: stretch; gap: 10px; }
+  .cta-primary { justify-content: center; width: 100%; padding: 13px 16px; font-size: 11px; }
+  .cta-secondary { display: none; }   /* hidden on mobile */
+
+  /* Bottom controls pinned to the viewport bottom. */
+  .controls {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    padding: 10px 16px;
+    background: linear-gradient(to top, var(--bg) 50%, rgba(10,8,7,0.7) 90%, transparent);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 50;
+    gap: 12px;
+  }
+  .progress { display: none; }
+}
+@media (max-width: 420px) {
+  .pill { font-size: 9px; letter-spacing: 0.22em; }
+  .bottles { height: clamp(200px, 32vh, 280px); }
+}
+
+/* Short viewports (low height OR zoomed in): use even smaller content   */
+/* so the CTAs never reach the bottom controls.                          */
+@media (max-height: 800px) {
+  .title       { font-size: clamp(24px, 2.4vw, 38px); margin-bottom: 10px; }
+  .pill        { margin-bottom: 10px; }
+  .subtitle    { margin-bottom: 12px; }
+  .description { margin-bottom: 14px; }
+  .spec        { padding-top: 8px; margin-bottom: 14px; }
+  .spec > div  { padding: 5px 0; }
+  .ctas        { gap: 8px; }
+  .cta-primary { padding: 11px 16px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bottle-img, .podium .ring, .podium .glow { transition: none !important; }
+  .bottle-img, .bg-img { transition: none !important; }
 }

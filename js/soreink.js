@@ -8,8 +8,9 @@
 const BEERS = [
   {
     num: "01",
-    src: "bottles/02.png",
+    src: "assets/bottles/02.png",
     name: "Mangós Búza",
+    bg: "assets/backgrounds/mango.png",
     sub: "Mangós witbier szűretlen kisüzemi sör",
     cardSub: "Witbier",
     desc: "Mangós Witbier típusú szűretlen kisüzemi sör. Először édes, majd savanyú, azután pedig lehengerlően gyümölcsös. Olyan, mint egy trópusi utazás, tele kanyarokkal.",
@@ -27,8 +28,9 @@ const BEERS = [
   },
   {
     num: "02",
-    src: "bottles/01.png",
+    src: "assets/bottles/01.png",
     name: "Bécsi Lager",
+    bg: "assets/backgrounds/nemet.png",
     sub: "Klasszikus világos lager",
     cardSub: "Világos lager",
     desc: "Bécsi típusú lager. Karamellás malátaív, tiszta, letisztult finálé.",
@@ -46,8 +48,9 @@ const BEERS = [
   },
   {
     num: "03",
-    src: "bottles/05.png",
+    src: "assets/bottles/05.png",
     name: "Málnás Gose",
+    bg: "assets/backgrounds/malna.png",
     sub: "Sós-savanyú gose málnával",
     cardSub: "Gose",
     desc: "Gose típusú, enyhén sós, savanyú búzasör málnával. Bírod a savanyút? Ez savanyú! De ez tényleg savanyú… Mi szóltunk!",
@@ -65,8 +68,9 @@ const BEERS = [
   },
   {
     num: "04",
-    src: "bottles/04.png",
+    src: "assets/bottles/04.png",
     name: "Belga Búza",
+    bg: "assets/backgrounds/belgabuza.png",
     sub: "Belga stílusú witbier",
     cardSub: "Witbier",
     desc: "Klasszikus belga búza koriander- és narancshéj jeggyel. Lágy, csiszolt karakter.",
@@ -84,8 +88,9 @@ const BEERS = [
   },
   {
     num: "05",
-    src: "bottles/03.png",
+    src: "assets/bottles/03.png",
     name: "Piña Colada Sour Ale",
+    bg: "assets/backgrounds/pinacolada.png",
     sub: "Ananász-kókusz sour ale",
     cardSub: "Sour ale",
     desc: "Ananász és kókusz. Savanyú sör, laktózzal erjesztve. Trópusi és selymes.",
@@ -103,8 +108,9 @@ const BEERS = [
   },
   {
     num: "06",
-    src: "bottles/06.png",
+    src: "assets/bottles/06.png",
     name: "Meggyes",
+    bg: "assets/backgrounds/meggy.png",
     sub: "Könnyed, frissítő meggyes gyümölcsös sör",
     cardSub: "Gyümölcsös sör",
     desc: "Könnyed, frissítő gyümölcsös sör, melyben először a meggy harsány zamata dominál, majd a gyümölcs édessége és buja fanyarsága felváltva jelenik meg a kortyokban.",
@@ -140,7 +146,8 @@ const ICONS = {
 // ──────────────────────────────────────────────────────────────────────────
 
 const bottlesEl = document.getElementById("bottles");
-const podium    = document.getElementById("podium");
+const bgA       = document.getElementById("bgA");
+const bgB       = document.getElementById("bgB");
 const content   = document.getElementById("content");
 const features  = document.getElementById("features");
 const sideLeft  = document.getElementById("sideLeft");
@@ -200,6 +207,24 @@ function renderSideCard(card, beer) {
 }
 
 // ──────────────────────────────────────────────────────────────────────────
+// Background crossfade — two stacked <img> layers swap their .active class.
+// All 6 images preloaded once on boot so the swap is instant.
+// ──────────────────────────────────────────────────────────────────────────
+
+let bgActive = bgA;
+let bgIdle   = bgB;
+BEERS.forEach(b => { const i = new Image(); i.src = b.bg; });
+
+function setBackground(beer) {
+  if (bgActive.getAttribute("src") === beer.bg) return;
+  bgIdle.src = beer.bg;
+  void bgIdle.offsetWidth;          // force a layout flush
+  bgIdle.classList.add("active");
+  bgActive.classList.remove("active");
+  [bgActive, bgIdle] = [bgIdle, bgActive];
+}
+
+// ──────────────────────────────────────────────────────────────────────────
 // Main update — repositions bottles, swaps content, animates accents
 // ──────────────────────────────────────────────────────────────────────────
 
@@ -211,6 +236,9 @@ function update() {
   // Set the CSS accent vars so border/text colors tween together
   document.documentElement.style.setProperty("--accent", beer.accent);
   document.documentElement.style.setProperty("--accent-soft", beer.accentSoft);
+
+  // Crossfade the per-beer background
+  setBackground(beer);
 
   // Reposition bottles
   bottles.forEach((b, i) => {
@@ -235,8 +263,13 @@ function update() {
   sideRight.style.opacity = "0";
 
   setTimeout(() => {
-    titleEl.innerHTML  = beer.name.replace(/ /g, "<br>");
+    {
+      const w = beer.name.split(" ");
+      // 2-word names look best stacked; longer names wrap naturally.
+      titleEl.innerHTML = w.length === 2 ? w.join("<br>") : beer.name;
+    }
     subtitleEl.textContent = beer.sub;
+    subtitleEl.dataset.abv = beer.abv;   /* shown inline next to subtitle on mobile via CSS */
     descEl.textContent     = beer.desc;
     pillEl.textContent     = beer.pill;
     specType.textContent   = beer.type;

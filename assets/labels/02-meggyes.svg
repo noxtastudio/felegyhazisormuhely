@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1799" height="970" viewBox="0 0 1799 970" preserveAspectRatio="xMidYMid meet" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+
+  <defs>
+    <radialGradient id="vig" cx="50%" cy="50%" r="55%">
+      <stop offset="50%" stop-color="black" stop-opacity="0"></stop>
+      <stop offset="100%" stop-color="black" stop-opacity="0.22"></stop>
+    </radialGradient>
+    <pattern id="dots" x="0" y="0" width="56" height="56" patternUnits="userSpaceOnUse">
+      <circle cx="28" cy="28" r="2" fill="#F5EFE0" opacity="0.13"></circle>
+    </pattern>
+  </defs>
+
+  
+  <rect width="1799" height="970" fill="#A82632"></rect>
+  <rect width="1799" height="970" fill="url(#dots)"></rect>
+  <rect width="1799" height="970" fill="url(#vig)"></rect>
+
+  
+
+  
+  <text x="899" y="155" text-anchor="middle" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-style="italic" font-weight="700" font-size="92" letter-spacing="3" fill="#F5EFE0">FÉLEGYHÁZI</text>
+
+  
+  <text x="899" y="210" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="600" font-size="32" letter-spacing="18" fill="#F5EFE0" opacity="0.92">SÖRMŰHELY</text>
+
+  
+  <line x1="759" y1="250" x2="1039" y2="250" stroke="#F5EFE0" stroke-width="1.5" opacity="0.5"></line>
+  <circle cx="899" cy="250" r="4" fill="#F5EFE0" opacity="0.7"></circle>
+
+  
+  <g transform="translate(899, 480) scale(1.75)">
+    <g>
+            
+            <path d="M 5 -120 C 30 -145 70 -135 65 -110 C 45 -100 20 -105 5 -115 Z" fill="#F5EFE0"></path>
+            
+            <path d="M 12 -118 Q 38 -120 60 -115" stroke="#A82632" stroke-width="2" fill="none" opacity="0.4"></path>
+            
+            <path d="M 5 -115 L 5 -90" stroke="#F5EFE0" stroke-width="4" stroke-linecap="round"></path>
+            
+            <path d="M 5 -90 C -25 -65 -45 -45 -50 -10" stroke="#F5EFE0" stroke-width="4" fill="none" stroke-linecap="round"></path>
+            
+            <path d="M 5 -90 C 30 -60 45 -35 55 0" stroke="#F5EFE0" stroke-width="4" fill="none" stroke-linecap="round"></path>
+            
+            <circle cx="-50" cy="38" r="46" fill="#F5EFE0"></circle>
+            <circle cx="55" cy="52" r="48" fill="#F5EFE0"></circle>
+            
+            <ellipse cx="-62" cy="24" rx="7" ry="13" fill="#A82632" opacity="0.35"></ellipse>
+            <ellipse cx="42" cy="38" rx="7" ry="13" fill="#A82632" opacity="0.35"></ellipse>
+        </g>
+  </g>
+
+  
+  <text x="899" y="815" text-anchor="middle" font-family="Helvetica Neue, &#39;Arial Black&#39;, sans-serif" font-weight="900" font-size="128" letter-spacing="-1.5" fill="#F5EFE0">MEGGYES</text>
+  
+
+  
+  <line x1="639" y1="900" x2="1159" y2="900" stroke="#F5EFE0" stroke-width="1" opacity="0.45"></line>
+
+  
+  <text x="899" y="938" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="600" font-size="26" letter-spacing="8" fill="#F5EFE0" opacity="0.92">330ML  /  ALC. 5.5% V/V</text>
+
+</svg>

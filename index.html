@@ -1,138 +1,296 @@
 <!doctype html>
-<html lang="hu">
+<html lang="hu" class="snap">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Félegyházi Sörműhely — sör válogatás</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Félegyházi Sörműhely — Kézműves sörök Kiskunfélegyházáról</title>
+<meta name="description" content="Félegyházi Sörműhely — kisüzemi, kézműves sörök Kiskunfélegyházáról 2020 óta. Élet, (s)öröm, Félegyháza!">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
-  <!-- ─── TOP NAVIGATION ─────────────────────────────────────────────── -->
-  <header class="nav">
-    <a class="brand" href="#">
-      <span>Félegyházi</span>
-      <em>Sörműhely</em>
+<!-- ═══ AGE GATE ═══════════════════════════════════════════════════════ -->
+<div class="agegate" id="agegate" role="dialog" aria-modal="true" aria-label="Korhatár-ellenőrzés">
+  <div class="agegate-card">
+    <div class="agegate-mark">Félegyházi<span>Sörműhely</span></div>
+    <div class="agegate-rule"></div>
+    <h2>Elmúltál már 18 éves?</h2>
+    <p>Oldalunkon kézműves söröket forgalmazunk. Belépés előtt erősítsd meg, hogy elmúltál 18 éves.</p>
+    <div class="agegate-actions">
+      <button class="btn btn-accent" data-gate="yes">Igen, elmúltam</button>
+      <button class="btn agegate-deny" data-gate="no">Nem, még nem</button>
+    </div>
+    <p class="agegate-note">A megerősítést elmentjük erre a böngészőre.</p>
+  </div>
+</div>
+
+<!-- ═══ NAV ════════════════════════════════════════════════════════════ -->
+<header class="nav">
+  <a class="brand" href="index.html" aria-label="Félegyházi Sörműhely — kezdőlap">
+    <b>Félegyházi</b><span>Sörműhely</span>
+  </a>
+  <nav class="menu" aria-label="Fő menü">
+    <a href="index.html">Sörfőzde</a>
+    <a href="soreink.html">Söreink</a>
+    <a href="webshop.html">Webshop</a>
+    <a href="#kapcsolat">Kapcsolat</a>
+  </nav>
+  <div class="nav-right">
+    <a class="icon-btn" href="webshop.html" aria-label="Kosár">
+      <svg viewBox="0 0 24 24"><path d="M6 7h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L6 7z M9 7a3 3 0 0 1 6 0" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="cart-badge" style="display:none">0</span>
     </a>
-
-    <nav class="menu">
-      <a href="#" class="active">Söreink</a>
-      <a href="#">Rólunk</a>
-      <a href="#">Alapanyagaink</a>
-      <a href="#">Hírek</a>
-      <a href="#">Kapcsolat</a>
-    </nav>
-
-    <div class="nav-right">
-      <button class="icon-btn" aria-label="Fiók">
-        <svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-      </button>
-      <button class="icon-btn cart" aria-label="Kosár">
-        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 7h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L6 7z M9 7a3 3 0 0 1 6 0" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span class="cart-badge">2</span>
-      </button>
-      <button class="lang">HU</button>
-    </div>
-  </header>
-
-  <!-- ─── STAGE ──────────────────────────────────────────────────────── -->
-  <main class="stage">
-
-    <!-- All bottles stacked. State class drives position/scale. -->
-    <div class="bottles" id="bottles">
-      <img class="bottle-img" data-idx="0" src="bottles/02.png" alt="Mangós Búza">
-      <img class="bottle-img" data-idx="1" src="bottles/01.png" alt="Bécsi Lager">
-      <img class="bottle-img" data-idx="2" src="bottles/05.png" alt="Málnás Gose">
-      <img class="bottle-img" data-idx="3" src="bottles/04.png" alt="Belga Búza">
-      <img class="bottle-img" data-idx="4" src="bottles/03.png" alt="Piña Colada Sour Ale">
-      <img class="bottle-img" data-idx="5" src="bottles/06.png" alt="Meggyes">
-    </div>
-
-    <!-- Glowing podium ring underneath -->
-    <div class="podium" id="podium" aria-hidden="true">
-      <div class="ring r1"></div>
-      <div class="ring r2"></div>
-      <div class="ring r3"></div>
-      <div class="glow"></div>
-    </div>
-
-    <!-- Center content panel (left of the bottle) -->
-    <section class="content" id="content">
-      <span class="pill">
-        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-          <path d="M12 2 L13.5 8.5 L20 10 L13.5 11.5 L12 18 L10.5 11.5 L4 10 L10.5 8.5 Z" fill="currentColor"/>
-        </svg>
-        <span id="pillText">Újdonság</span>
-      </span>
-      <h1 class="title" id="title">Mangós<br>Búza</h1>
-      <p class="subtitle" id="subtitle">Trópusi gyümölcsös búzasör</p>
-      <p class="description" id="description">
-        Trópusi mangó-pulp búzasör alapon. Lágy és gyümölcsös, természetes mangóval készítve.
-      </p>
-      <dl class="spec">
-        <div><dt>Típus</dt><dd id="specType">Gyümölcsös búzasör</dd></div>
-        <div><dt>Alkohol</dt><dd id="specAbv">5% V/V</dd></div>
-        <div><dt>Kiszerelés</dt><dd>330 ml</dd></div>
-      </dl>
-      <div class="ctas">
-        <button class="cta-primary">
-          Felfedezem
-          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14 M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button class="cta-secondary">
-          <span class="play-circle">
-            <svg viewBox="0 0 24 24" width="12" height="12"><path d="M9 6 L18 12 L9 18 Z" fill="currentColor"/></svg>
-          </span>
-          Ismerd meg a sörünket
-        </button>
-      </div>
-    </section>
-
-    <!-- Right side: per-beer feature highlights -->
-    <aside class="features" id="features">
-      <!-- 3 feature blocks rendered by JS -->
-    </aside>
-
-    <!-- LEFT side preview card (prev beer) -->
-    <aside class="side-card left" id="sideLeft">
-      <h3 class="side-name"></h3>
-      <p class="side-sub"></p>
-      <p class="side-desc"></p>
-      <div class="side-footer">
-        <span class="side-abv"></span>
-        <button class="side-plus" aria-label="Részletek">+</button>
-      </div>
-    </aside>
-
-    <!-- RIGHT side preview card (next beer) -->
-    <aside class="side-card right" id="sideRight">
-      <h3 class="side-name"></h3>
-      <p class="side-sub"></p>
-      <p class="side-desc"></p>
-      <div class="side-footer">
-        <span class="side-abv"></span>
-        <button class="side-plus" aria-label="Részletek">+</button>
-      </div>
-    </aside>
-
-  </main>
-
-  <!-- ─── BOTTOM CONTROLS ──────────────────────────────────────────────── -->
-  <footer class="controls">
-    <button class="arrow" id="prev" aria-label="Előző">
-      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M16 4 L8 12 L16 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <button class="nav-burger" aria-label="Menü" aria-expanded="false">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     </button>
-    <span class="counter-current" id="capNum">01</span>
-    <div class="progress" id="progress"></div>
-    <span class="counter-total">/ <span id="capTotal">06</span></span>
-    <button class="arrow" id="next" aria-label="Következő">
-      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 4 L16 12 L8 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </footer>
+  </div>
+</header>
 
-  <script type="module" src="script.js?v=4"></script>
+<div class="dots" id="dots" aria-hidden="true"></div>
+
+<main class="snap-main">
+
+  <!-- ═══ S1 · HERO ═══════════════════════════════════════════════════ -->
+  <section class="section hero" id="hero" data-screen-label="Kezdőlap">
+    <div class="hero-bg"><img src="assets/featured/taproom.jpg" alt="A Félegyházi Sörműhely söreinek sora a pult bárpultján"></div>
+    <div class="hero-inner">
+      <span class="kicker center">Kiskunfélegyháza &middot; 2020</span>
+      <h1 class="hero-mark">Félegyházi</h1>
+      <div class="hero-sub-mark">Sörműhely</div>
+      <div class="hero-rule"></div>
+      <p class="hero-tag">Élet, (s)öröm, Félegyháza!</p>
+      <p class="hero-line">Kézműves sörök Kiskunfélegyházáról, 2020 óta.</p>
+      <a class="btn btn-accent hero-cta" href="soreink.html">
+        Fedezd fel a söreinket
+        <svg class="arrow-ico" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <a class="scroll-cue" href="#sorfozde" aria-label="Görgess lejjebb">
+      <span>Görgess</span>
+      <span class="line"></span>
+    </a>
+  </section>
+
+  <!-- ═══ S2 · SÖRFŐZDE ═══════════════════════════════════════════════ -->
+  <section class="section sorfozde" id="sorfozde" data-screen-label="Sörfőzde">
+    <div class="section-inner">
+      <figure class="owner-figure">
+        <img src="assets/featured/owner.jpg" alt="Balogh Máté, a Félegyházi Sörműhely alapítója">
+        <figcaption>
+          <div>
+            <div class="cap-name">Balogh Máté</div>
+            <div class="cap-role">Alapító &middot; Sörfőző</div>
+          </div>
+          <div class="cap-year">EST. 2020</div>
+        </figcaption>
+      </figure>
+      <div class="letter">
+        <span class="kicker">A sörfőzde</span>
+        <h2>Kedves Sörfogyasztó!</h2>
+        <p>A sörfőzéssel több mint tíz éve ismerkedtem meg, amikor Zoli barátommal 2014 karácsonya előtt a garázsban lefőztük az első sörünket. A család és a barátok szerint egyáltalán nem volt ihatatlan — sőt! —, így a hobbiból hamar szenvedély lett.</p>
+        <p>2017-től a Bäder Sörfőzde sörfőzde-vezetőjeként dolgoztam, és az ott szerzett három év tapasztalatával 2020 januárjától már a saját műhelyünket üzemeltetjük, Félegyházi Sörműhely néven. Söreinket Kiskunfélegyházán készítjük, tradicionális eljárással, a kor technológiai hátterével és innovatív felfogással. Vidám frissesség, szolid elegancia és könnyed életöröm jellemzi őket.</p>
+        <p class="signoff">Egészségedre! Üdvözlettel, Balogh Máté és a Félegyházi Sörműhely csapata.</p>
+        <ul class="team">
+          <li><span class="t-name">Szécsényi Attila</span><span class="t-role">Sörfőzés · Kiszerelés</span></li>
+          <li><span class="t-name">Rózsavári Zsolt</span><span class="t-role">Sörfőzés · Szállítás</span></li>
+          <li><span class="t-name">Cseri Nikolett</span><span class="t-role">Iroda</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ S3 · MIÉRT MI? ══════════════════════════════════════════════ -->
+  <section class="section miert" id="miert" data-screen-label="Miért mi?">
+    <div class="section-inner">
+      <div class="sec-head center">
+        <span class="kicker center">A mi mértékünk</span>
+        <h2 class="sec-title">Miért <em>mi?</em></h2>
+      </div>
+      <div class="pillars">
+        <article class="pillar">
+          <div class="pillar-media">
+            <img src="assets/featured/tanks.jpg" alt="Kisüzemi erjesztő tankok a Félegyházi Sörműhelyben">
+            <span class="pillar-num">01</span>
+          </div>
+          <div class="pillar-body">
+            <span class="pillar-tag">Kézzel, kis tételben</span>
+            <h3>Kisüzemi mérték</h3>
+            <p>Fontos szempont, hogy a söröknél legyen plusz hozzáadott érték, és azok ne egy hatalmas gyártósor egy-egy darabjai legyenek. Minden tétel a kezünk nyomát viseli.</p>
+          </div>
+        </article>
+        <article class="pillar">
+          <div class="pillar-media">
+            <img src="assets/featured/pour.jpg" alt="Friss csapolás egy márkás Félegyházi pohárba">
+            <span class="pillar-num">02</span>
+          </div>
+          <div class="pillar-body">
+            <span class="pillar-tag">Friss, rövid szavatossággal</span>
+            <h3>Frissesség és íz</h3>
+            <p>Söreinknél kis raktárkészlettel és viszonylag rövid szavatossági idővel dolgozunk, így garantálva, hogy Hozzád eljutva frissek és finomak maradjanak.</p>
+          </div>
+        </article>
+      </div>
+      <div class="miert-foot">
+        <span class="serif-i">„Vidám frissesség, szolid elegancia, könnyed életöröm.”</span>
+        <span>Kézzel főzve Kiskunfélegyházán &middot; Jankesz Gasztro Kft.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ S4 · GALÉRIA ════════════════════════════════════════════════ -->
+  <section class="section galeria" id="galeria" data-screen-label="Galéria">
+    <div class="section-inner">
+      <div class="sec-head">
+        <span class="kicker">A műhelyből</span>
+        <h2 class="sec-title">Galéria</h2>
+      </div>
+    </div>
+    <div class="marquee" aria-label="Fotók a sörfőzdéből">
+      <div class="marquee-track" id="marqueeTrack"></div>
+    </div>
+    <div class="galeria-foot">
+      <span>Sörfőzés &middot; Csapolás &middot; Taproom &middot; Fesztiválok</span>
+      <span>Húzd vízszintesen &nbsp;⇄</span>
+    </div>
+  </section>
+
+  <!-- ═══ S6 · HOL KAPHATÓ ════════════════════════════════════════════ -->
+  <section class="section hol" id="hol" data-screen-label="Hol kapható">
+    <div class="section-inner">
+      <div>
+        <div class="sec-head">
+          <span class="kicker">Vendéglátó partnerek</span>
+          <h2 class="sec-title">Hol <em>kapható?</em></h2>
+        </div>
+        <div class="partners">
+          <div class="partner">
+            <span class="p-name">ÁGYÚ Kézműves Sörgaléria</span>
+            <span class="p-city">Kiskunfélegyháza</span>
+            <span class="p-desc">A saját márkaboltunk és csapolt sörök galériája.</span>
+            <span class="p-addr">Kossuth utca 34.</span>
+          </div>
+          <div class="partner">
+            <span class="p-name">Foltos Farkas Söröző</span>
+            <span class="p-city">Kecskemét</span>
+            <span class="p-desc">Kézműves sörözés a város szívében.</span>
+            <span class="p-addr">Csányi János krt. 4.</span>
+          </div>
+          <div class="partner">
+            <span class="p-name">Wunder Sörművek</span>
+            <span class="p-city">Budapest</span>
+            <span class="p-desc">Válogatott hazai és külföldi kézműves kínálat.</span>
+            <span class="p-addr">Zichy Jenő utca 41.</span>
+          </div>
+          <div class="partner">
+            <span class="p-name">Beerselection</span>
+            <span class="p-city">Budapest</span>
+            <span class="p-desc">Bottle shop a craft sör szerelmeseinek.</span>
+            <span class="p-addr">József krt. 22–24.</span>
+          </div>
+        </div>
+        <div class="city-pills" aria-label="További helyek">
+          <span class="city-pill">Ganz Söröző</span>
+          <span class="city-pill">Four Points by Sheraton</span>
+          <span class="city-pill">Kapualj Abc</span>
+          <span class="city-pill">Crafty Bar</span>
+          <span class="city-pill">Italom</span>
+          <span class="city-pill">Kandalló Pub</span>
+          <span class="city-pill">Gólya Presszó</span>
+          <span class="city-pill">Béla</span>
+          <span class="city-pill">Burger Bár-Hol</span>
+          <span class="city-pill">Mitzi</span>
+          <span class="city-pill">Beer Brothers</span>
+          <span class="city-pill">Murok Pálinkávézó</span>
+          <span class="city-pill">New Palm Cafe &amp; Pub</span>
+          <span class="city-pill">Rakpart 62 — Szeged</span>
+        </div>
+      </div>
+      <div class="hol-map">
+        <iframe title="Térkép — Kiskunfélegyháza, Szentesi út 7." loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=Kiskunf%C3%A9legyh%C3%A1za%20Szentesi%20%C3%BAt%207&output=embed"></iframe>
+        <div class="map-tag">
+          <b>Sörfőzde &amp; átvétel</b>
+          <span>6100 Kiskunfélegyháza, Szentesi út 7.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ S7 · KAPCSOLAT + FOOTER ═════════════════════════════════════ -->
+  <section class="section kapcsolat" id="kapcsolat" data-screen-label="Kapcsolat">
+    <div class="kapcsolat-inner">
+      <div class="contact-grid">
+        <div class="contact-lead">
+          <span class="kicker">Kapcsolat</span>
+          <h2>Írj, hívj,<br><em>vagy ugorj be</em> egy sörre.</h2>
+          <div class="contact-rows">
+            <div class="contact-row"><span class="c-label">Cím</span><span class="c-val">6100 Kiskunfélegyháza, Szentesi út 7.</span></div>
+            <div class="contact-row"><span class="c-label">Email</span><span class="c-val"><a href="mailto:info@felegyhazisor.hu">info@felegyhazisor.hu</a></span></div>
+            <div class="contact-row"><span class="c-label">Telefon</span><span class="c-val"><a href="tel:+36708508139">+36 70 850 8139</a></span></div>
+          </div>
+          <div class="resellers">
+            <span class="r-label">Viszonteladóknak — Budapest &amp; Pest vm.</span>
+            <b>Gócza Ágnes</b> &middot; <a href="tel:+36306520402">+36 30 652 0402</a> &middot; <a href="mailto:agi.felegyhazisor@gmail.com">agi.felegyhazisor@gmail.com</a>
+          </div>
+        </div>
+        <div class="newsletter">
+          <h3>Kövesd az ízt</h3>
+          <p>Iratkozz fel, és elsőként értesülsz az új tételekről, limitált kiadásokról és csomagajánlatokról.</p>
+          <form id="newsletterForm">
+            <input type="email" required placeholder="e-mail címed" aria-label="Email cím">
+            <button class="btn btn-accent" type="submit">Feliratkozom</button>
+          </form>
+          <div class="msg" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <b>Félegyházi</b><span>Sörműhely</span>
+          <p>Kisüzemi, kézműves sörök Kiskunfélegyházáról. Friss tételek, rövid szavatosság, hamisítatlan ízek — egyenesen a műhelyből.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Oldalak</h4>
+          <a href="index.html">Sörfőzde</a>
+          <a href="soreink.html">Söreink</a>
+          <a href="webshop.html">Webshop</a>
+          <a href="#hol">Hol kapható</a>
+          <a href="#kapcsolat">Kapcsolat</a>
+        </div>
+        <div class="footer-col">
+          <h4>Elérhetőség</h4>
+          <p>6100 Kiskunfélegyháza,<br>Szentesi út 7.</p>
+          <a href="mailto:info@felegyhazisor.hu">info@felegyhazisor.hu</a>
+          <a href="tel:+36708508139">+36 70 850 8139</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>Félegyházi Sörműhely © <span class="year">2026</span> &middot; Jankesz Gasztro Kft. &middot; Adószám: 27298604-2-03</span>
+        <span class="legal">
+          <a href="felhasznalasi-feltetelek.html">Felhasználási feltételek</a>
+          <a href="adatvedelmi-szabalyzat.html">Adatvédelmi Szabályzat</a>
+          <a href="adatvedelmi-szabalyzat.html#sutik">Sütik</a>
+        </span>
+      </div>
+    </footer>
+  </section>
+
+</main>
+
+<!-- ═══ COOKIE STRIP ═══════════════════════════════════════════════════ -->
+<div class="cookie" id="cookie">
+  <span>Sütiket használunk az oldal működéséhez. Részletek az <a href="adatvedelmi-szabalyzat.html#sutik">Adatvédelmi Szabályzatban</a>.</span>
+  <button>Rendben</button>
+</div>
+
+<script src="js/site.js"></script>
+<script src="js/index.js"></script>
 </body>
 </html>

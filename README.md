@@ -1,66 +1,79 @@
 # Félegyházi Sörműhely
 
-Editorial product carousel for the Félegyházi craft brewery. Dark theme with
-horizontal scroll between 6 beers — accent color, background, side cards, and
-feature panel all tween to match the centered bottle.
+Static website for **Félegyházi Sörműhely** — kézműves sörök Kiskunfélegyházáról 2020 óta.
+
+Editorial dark theme with a one-section-per-viewport scroll-snap front page, a webshop catalog mock, and a standalone immersive product showcase for the six hero beers.
+
+## Pages
+
+| File | Purpose |
+|---|---|
+| `index.html` | Front page — Hero, Sörfőzde, Miért mi?, Galéria, Hol kapható, Kapcsolat |
+| `soreink.html` | Söreink — horizontal bottle showcase of the 6 hero beers |
+| `webshop.html` | Webshop catalog (12 products, filters, cart drawer mock) |
+| `felhasznalasi-feltetelek.html` | ÁSZF (legal) |
 
 ## Stack
 
-Pure static site. No build step. No dependencies.
+Pure static. No build step. No framework. No npm.
+
+- Vanilla HTML + CSS + JS (ES modules where it matters)
+- Google Fonts (Cormorant Garamond + Inter)
+- Embedded Google Maps iframe in the "Hol kapható" section
+
+## Structure
 
 ```
 .
-├── index.html          # markup + structure
-├── style.css           # all styles, dark editorial theme
-├── script.js           # carousel state machine + beer data
-├── bottles/            # 6 transparent-background bottle PNGs
-│   ├── 01.png          # Mangós Búza
-│   ├── 02.png          # Bécsi Lager
-│   ├── 03.png          # Málnás Gose
-│   ├── 04.png          # Belga Búza
-│   ├── 05.png          # Piña Colada Sour Ale
-│   └── 06.png          # Meggyes
-└── .nojekyll           # tells GitHub Pages to serve files as-is
+├── index.html
+├── soreink.html
+├── webshop.html
+├── felhasznalasi-feltetelek.html
+├── css/
+│   ├── base.css      # shared nav + footer + age gate + tokens
+│   ├── index.css     # front-page sections
+│   ├── soreink.css   # bottle showcase (loads on top of base.css)
+│   ├── webshop.css   # catalog + cart drawer
+│   └── legal.css     # ÁSZF / privacy reader
+├── js/
+│   ├── site.js       # age gate, mobile menu, cart store, cookie strip
+│   ├── index.js      # carousel, gallery, section dots
+│   ├── soreink.js    # bottle stage state machine
+│   └── webshop.js    # filters + cart drawer mock
+└── assets/
+    ├── bottles/      # 6 transparent bottle renders
+    ├── backgrounds/  # per-beer scene backgrounds
+    ├── labels/       # SVG label artwork
+    ├── featured/     # owner + brewery hero photos
+    ├── gallery/      # brewery / event photos
+    └── products/     # webshop product photographs
 ```
 
 ## Run locally
 
-Any static server works. From this folder:
-
 ```bash
-python3 -m http.server 8000
-# then open http://localhost:8000
+python3 -m http.server 8767
+# open http://localhost:8767
 ```
 
-Or just double-click `index.html` (note: ES module loading needs `http://`,
-not `file://`, so the local server is the reliable path).
+Any static server works (Node `serve`, `http-server`, Caddy, nginx).
 
-## Deploy on GitHub Pages
+## Deploy
 
-1. Push this folder's contents (not the folder itself — its contents) to the
-   root of your repo, or to a `gh-pages` branch.
-2. Settings → Pages → Source: pick the branch.
-3. Done. Live at `https://<your-username>.github.io/<repo>/`.
+GitHub Pages drop-in. From this repository's **Settings → Pages**:
 
-The `.nojekyll` file tells GitHub Pages to skip Jekyll preprocessing.
+- Source: **Deploy from a branch**
+- Branch: `main`
+- Folder: `/ (root)`
 
-## Editing
+No build step needed. Push to `main` and Pages serves it.
 
-- **Change a beer**: edit the `BEERS` array at the top of `script.js`. Fields:
-  `num`, `src`, `name`, `sub`, `cardSub`, `desc`, `short`, `type`, `abv`,
-  `accent`, `accentSoft`, `pill`, `features`.
-- **Swap a bottle image**: replace `bottles/0N.png`. Transparent PNG, portrait.
-- **Add a 7th beer**: append to `BEERS` array + add a matching `<img>` in
-  `index.html` inside `.bottles`. The progress bar, dots, color tweens, and
-  state machine all derive from the array — no logic to touch.
-- **Tweak motion**: `COOLDOWN_MS` in `script.js` (debounce); transition
-  duration / easing in `style.css` `:root` (`--ease`) and on `.bottle-img`.
+## Notes
 
-## Controls
+- The mobile hamburger is wired up in `js/site.js`; the slide-down panel styles live in `css/base.css`.
+- Cart state persists in `localStorage` under the key `fhs_cart`. Cart drawer is UI-only — no checkout backend.
+- The age gate persists once accepted (`fhs_age_verified=true` in localStorage).
+- Live brand: <https://www.felegyhazisor.hu/>
+- Cég: Jankesz Gasztro Kft. · 6100 Kiskunfélegyháza, Szentesi út 7. · Adószám 27298604-2-03
 
-- Mouse wheel / trackpad: horizontal scroll
-- Swipe (touch / mouse drag): horizontal swipe
-- Arrow keys: ← →
-- Click side bottle: jump to that bottle
-- Click progress segment: jump to that beer
-- Click ← → arrows in the bottom bar: prev / next
+— Élet, (s)öröm, Félegyháza!

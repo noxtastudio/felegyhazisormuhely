@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1799" height="970" viewBox="0 0 1799 970" preserveAspectRatio="xMidYMid meet" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+
+  <defs>
+    <radialGradient id="vig" cx="50%" cy="50%" r="55%">
+      <stop offset="50%" stop-color="black" stop-opacity="0"></stop>
+      <stop offset="100%" stop-color="black" stop-opacity="0.22"></stop>
+    </radialGradient>
+    <pattern id="dots" x="0" y="0" width="56" height="56" patternUnits="userSpaceOnUse">
+      <circle cx="28" cy="28" r="2" fill="#F5EFE0" opacity="0.13"></circle>
+    </pattern>
+  </defs>
+
+  
+  <rect width="1799" height="970" fill="#E04539"></rect>
+  <rect width="1799" height="970" fill="url(#dots)"></rect>
+  <rect width="1799" height="970" fill="url(#vig)"></rect>
+
+  
+
+  
+  <text x="899" y="155" text-anchor="middle" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-style="italic" font-weight="700" font-size="92" letter-spacing="3" fill="#F5EFE0">FÉLEGYHÁZI</text>
+
+  
+  <text x="899" y="210" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="600" font-size="32" letter-spacing="18" fill="#F5EFE0" opacity="0.92">SÖRMŰHELY</text>
+
+  
+  <line x1="759" y1="250" x2="1039" y2="250" stroke="#F5EFE0" stroke-width="1.5" opacity="0.5"></line>
+  <circle cx="899" cy="250" r="4" fill="#F5EFE0" opacity="0.7"></circle>
+
+  
+  <g transform="translate(899, 480) scale(1.75)">
+    <g>
+            <path d="M -10 -95 C -25 -120 -45 -120 -55 -100 C -45 -85 -25 -85 -10 -90 Z" fill="#F5EFE0"></path>
+            <path d="M 10 -95 C 25 -120 45 -120 55 -100 C 45 -85 25 -85 10 -90 Z" fill="#F5EFE0"></path>
+            <path d="M 0 -100 L 0 -75" stroke="#F5EFE0" stroke-width="3" stroke-linecap="round"></path>
+            <circle cx="0" cy="-60" r="20" fill="#F5EFE0"></circle><circle cx="-30" cy="-45" r="20" fill="#F5EFE0"></circle><circle cx="30" cy="-45" r="20" fill="#F5EFE0"></circle><circle cx="-50" cy="-15" r="20" fill="#F5EFE0"></circle><circle cx="0" cy="-20" r="20" fill="#F5EFE0"></circle><circle cx="50" cy="-15" r="20" fill="#F5EFE0"></circle><circle cx="-45" cy="20" r="20" fill="#F5EFE0"></circle><circle cx="0" cy="25" r="20" fill="#F5EFE0"></circle><circle cx="45" cy="20" r="20" fill="#F5EFE0"></circle><circle cx="-25" cy="55" r="20" fill="#F5EFE0"></circle><circle cx="25" cy="55" r="20" fill="#F5EFE0"></circle><circle cx="0" cy="80" r="20" fill="#F5EFE0"></circle>
+        </g>
+  </g>
+
+  
+  <text x="899" y="750" text-anchor="middle" font-family="Helvetica Neue, &#39;Arial Black&#39;, sans-serif" font-weight="900" font-size="150" letter-spacing="-1.5" fill="#F5EFE0">MÁLNÁS</text>
+  <text x="899" y="888" text-anchor="middle" font-family="Helvetica Neue, &#39;Arial Black&#39;, sans-serif" font-weight="900" font-size="150" letter-spacing="-1.5" fill="#F5EFE0">GOSE</text>
+
+  
+  <line x1="639" y1="900" x2="1159" y2="900" stroke="#F5EFE0" stroke-width="1" opacity="0.45"></line>
+
+  
+  <text x="899" y="938" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="600" font-size="26" letter-spacing="8" fill="#F5EFE0" opacity="0.92">330ML  /  ALC. 4.5% V/V</text>
+
+</svg>
