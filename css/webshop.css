@@ -2,7 +2,7 @@
    webshop.html — product catalog + cart mock
    ═══════════════════════════════════════════════════════════════════════ */
 
-body.shop { padding-top: var(--nav-h); background: var(--bg); }
+body.shop { padding-top: calc(var(--nav-h) + var(--banner-h)); background: var(--bg); }
 
 /* ─── Promo banner ──────────────────────────────────────────────────────── */
 .promo {
@@ -50,7 +50,7 @@ body.shop { padding-top: var(--nav-h); background: var(--bg); }
 /* ─── Filter bar ────────────────────────────────────────────────────────── */
 .filterbar {
   position: sticky;
-  top: var(--nav-h);
+  top: calc(var(--nav-h) + var(--banner-h));   /* sit just under nav+banner */
   z-index: 90;
   background: rgba(10,8,7,0.82);
   backdrop-filter: blur(14px);

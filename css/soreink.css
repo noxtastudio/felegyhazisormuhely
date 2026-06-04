@@ -57,7 +57,8 @@ html, body {
 .stage {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  /* Subtract the concept-demo banner so the stage still fits one viewport. */
+  height: calc(100vh - var(--banner-h, 0px));
   z-index: 1;
   padding-top: 88px;
   padding-bottom: 88px;
